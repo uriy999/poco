@@ -160,7 +160,8 @@ void SessionImpl::open(const std::string& connect)
 
 	Poco::Data::ODBC::SQLSetConnectAttr(_db, SQL_ATTR_QUIET_MODE, 0, 0);
 
-	if (!canTransact()) autoCommit("", true);
+	if (!canTransact() && supportAutoCommit())
+		autoCommit("", true);
 }
 
 
@@ -330,6 +331,16 @@ bool SessionImpl::isAutoCommit(const std::string&)
 	return (0 != value);
 }
 
+
+bool SessionImpl::supportAutoCommit()
+{
+	SQLULEN value = 0;
+	return !Utility::isError(Poco::Data::ODBC::SQLGetConnectAttr(_db,
+        SQL_ATTR_AUTOCOMMIT,
+        &value,
+        0,
+        0));
+}
 
 bool SessionImpl::isTransaction()
 {

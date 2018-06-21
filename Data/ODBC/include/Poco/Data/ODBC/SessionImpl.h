@@ -126,6 +126,8 @@ public:
 	bool isAutoCommit(const std::string& name="");
 		/// Returns autocommit property value.
 
+	bool supportAutoCommit();
+
 	void autoBind(const std::string&, bool val);
 		/// Sets automatic binding for the session.
 
